@@ -18,9 +18,9 @@ export default function SearchForm(props) {
         placeholder="character name"
         onChange={handleChange}
         value={search}
+        autocomplete="off"
         />
      </form>
-     <button type="submit"></button>
     </section>
   );
 }
