@@ -36,13 +36,23 @@ export default function CharacterList(props) {
   }, [locID]);
 
   useEffect(()=>{
-    resResults.map((charURL)=>{
-        axios.get(charURL)
-            .then(res => {
-                return setCharList([...charList, res.data])
-            })
-            .catch(err => console.log(err))
-    })
+
+        resResults.map((charURL)=>{
+            axios.get(charURL)
+                .then(res => { return res.data.name;})
+                .then(res =>{console.log(charList); 
+                    return setCharList(res);
+                
+                })
+                // .then(res=> setCharList([...charList, res]))
+                .catch(err => console.log(err))
+        })
+
+    
+
+
+
+
   }, [resResults])
 
 
@@ -51,7 +61,7 @@ export default function CharacterList(props) {
       <Search search={search} setSearch={setSearch}/>
       {console.log(charList)}
 
-<CardContainer>{resResults}</CardContainer>
+<CardContainer>{charList}</CardContainer>
 
     </section>
   );

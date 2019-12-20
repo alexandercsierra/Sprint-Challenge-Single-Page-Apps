@@ -176,28 +176,28 @@ export default function CharacterList() {
         "created": "2017-11-04T18:48:46.250Z"
         }
   ]
-  // useEffect(() => {
-  //   axios.get("https://rickandmortyapi.com/api/character/")
-  //     .then(res => {
-  //       let characters = res.data.results.filter(char =>{
-  //         return char.name.toLowerCase().includes(search.toLowerCase());
-  //       })
-  //       setResults(characters);
-
-  //     }
-      
-  //     )
-  //     .catch(err => console.log(err))
-  // }, []);
-
   useEffect(() => {
-
-        let characters = chars.filter(char =>{
+    axios.get("https://rickandmortyapi.com/api/character/")
+      .then(res => {
+        let characters = res.data.results.filter(char =>{
           return char.name.toLowerCase().includes(search.toLowerCase());
         })
         setResults(characters);
 
-      }, [search]);
+      }
+      
+      )
+      .catch(err => console.log(err))
+  }, []);
+
+  // useEffect(() => {
+
+  //       let characters = chars.filter(char =>{
+  //         return char.name.toLowerCase().includes(search.toLowerCase());
+  //       })
+  //       setResults(characters);
+
+  //     }, [search]);
 
 
   return (
