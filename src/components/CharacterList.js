@@ -1,16 +1,222 @@
 import React, { useEffect, useState } from "react";
+import Search from "./SearchForm"
+import CharacterCard from "./CharacterCard"
+import axios from "axios";
+import styled from 'styled-components'
+
+
+const CardContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  border: 1px solid red;
+`;
+
 
 export default function CharacterList() {
   // TODO: Add useState to track data from useEffect
+  const[search, setSearch] = useState("");
+  const[results, setResults] = useState([]);
 
+  let chars = [
+    {
+      "id": 1,
+      "name": "Rick Sanchez",
+      "status": "Alive",
+      "species": "Human",
+      "type": "",
+      "gender": "Male",
+      "origin": {
+      "name": "Earth (C-137)",
+      "url": "https://rickandmortyapi.com/api/location/1"
+      },
+      "location": {
+      "name": "Earth (Replacement Dimension)",
+      "url": "https://rickandmortyapi.com/api/location/20"
+      },
+      "image": "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+      "episode": [
+      "https://rickandmortyapi.com/api/episode/1",
+      "https://rickandmortyapi.com/api/episode/2",
+      "https://rickandmortyapi.com/api/episode/3",
+      "https://rickandmortyapi.com/api/episode/4",
+      "https://rickandmortyapi.com/api/episode/5",
+      "https://rickandmortyapi.com/api/episode/6",
+      "https://rickandmortyapi.com/api/episode/7",
+      "https://rickandmortyapi.com/api/episode/8",
+      "https://rickandmortyapi.com/api/episode/9",
+      "https://rickandmortyapi.com/api/episode/10",
+      "https://rickandmortyapi.com/api/episode/11",
+      "https://rickandmortyapi.com/api/episode/12",
+      "https://rickandmortyapi.com/api/episode/13",
+      "https://rickandmortyapi.com/api/episode/14",
+      "https://rickandmortyapi.com/api/episode/15",
+      "https://rickandmortyapi.com/api/episode/16",
+      "https://rickandmortyapi.com/api/episode/17",
+      "https://rickandmortyapi.com/api/episode/18",
+      "https://rickandmortyapi.com/api/episode/19",
+      "https://rickandmortyapi.com/api/episode/20",
+      "https://rickandmortyapi.com/api/episode/21",
+      "https://rickandmortyapi.com/api/episode/22",
+      "https://rickandmortyapi.com/api/episode/23",
+      "https://rickandmortyapi.com/api/episode/24",
+      "https://rickandmortyapi.com/api/episode/25",
+      "https://rickandmortyapi.com/api/episode/26",
+      "https://rickandmortyapi.com/api/episode/27",
+      "https://rickandmortyapi.com/api/episode/28",
+      "https://rickandmortyapi.com/api/episode/29",
+      "https://rickandmortyapi.com/api/episode/30",
+      "https://rickandmortyapi.com/api/episode/31"
+      ],
+      "url": "https://rickandmortyapi.com/api/character/1",
+      "created": "2017-11-04T18:48:46.250Z"
+      },
+      {
+      "id": 2,
+      "name": "Morty Smith",
+      "status": "Alive",
+      "species": "Human",
+      "type": "",
+      "gender": "Male",
+      "origin": {
+      "name": "Earth (C-137)",
+      "url": "https://rickandmortyapi.com/api/location/1"
+      },
+      "location": {
+      "name": "Earth (Replacement Dimension)",
+      "url": "https://rickandmortyapi.com/api/location/20"
+      },
+      "image": "https://rickandmortyapi.com/api/character/avatar/2.jpeg",
+      "episode": [
+      "https://rickandmortyapi.com/api/episode/1",
+      "https://rickandmortyapi.com/api/episode/2",
+      "https://rickandmortyapi.com/api/episode/3",
+      "https://rickandmortyapi.com/api/episode/4",
+      "https://rickandmortyapi.com/api/episode/5",
+      "https://rickandmortyapi.com/api/episode/6",
+      "https://rickandmortyapi.com/api/episode/7",
+      "https://rickandmortyapi.com/api/episode/8",
+      "https://rickandmortyapi.com/api/episode/9",
+      "https://rickandmortyapi.com/api/episode/10",
+      "https://rickandmortyapi.com/api/episode/11",
+      "https://rickandmortyapi.com/api/episode/12",
+      "https://rickandmortyapi.com/api/episode/13",
+      "https://rickandmortyapi.com/api/episode/14",
+      "https://rickandmortyapi.com/api/episode/15",
+      "https://rickandmortyapi.com/api/episode/16",
+      "https://rickandmortyapi.com/api/episode/17",
+      "https://rickandmortyapi.com/api/episode/18",
+      "https://rickandmortyapi.com/api/episode/19",
+      "https://rickandmortyapi.com/api/episode/20",
+      "https://rickandmortyapi.com/api/episode/21",
+      "https://rickandmortyapi.com/api/episode/22",
+      "https://rickandmortyapi.com/api/episode/23",
+      "https://rickandmortyapi.com/api/episode/24",
+      "https://rickandmortyapi.com/api/episode/25",
+      "https://rickandmortyapi.com/api/episode/26",
+      "https://rickandmortyapi.com/api/episode/27",
+      "https://rickandmortyapi.com/api/episode/28",
+      "https://rickandmortyapi.com/api/episode/29",
+      "https://rickandmortyapi.com/api/episode/30",
+      "https://rickandmortyapi.com/api/episode/31"
+      ],
+      "url": "https://rickandmortyapi.com/api/character/2",
+      "created": "2017-11-04T18:50:21.651Z"
+      },
+      {
+        "id": 1,
+        "name": "Rick Sanchez",
+        "status": "Alive",
+        "species": "Human",
+        "type": "",
+        "gender": "Male",
+        "origin": {
+        "name": "Earth (C-137)",
+        "url": "https://rickandmortyapi.com/api/location/1"
+        },
+        "location": {
+        "name": "Earth (Replacement Dimension)",
+        "url": "https://rickandmortyapi.com/api/location/20"
+        },
+        "image": "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+        "episode": [
+        "https://rickandmortyapi.com/api/episode/1",
+        "https://rickandmortyapi.com/api/episode/2",
+        "https://rickandmortyapi.com/api/episode/3",
+        "https://rickandmortyapi.com/api/episode/4",
+        "https://rickandmortyapi.com/api/episode/5",
+        "https://rickandmortyapi.com/api/episode/6",
+        "https://rickandmortyapi.com/api/episode/7",
+        "https://rickandmortyapi.com/api/episode/8",
+        "https://rickandmortyapi.com/api/episode/9",
+        "https://rickandmortyapi.com/api/episode/10",
+        "https://rickandmortyapi.com/api/episode/11",
+        "https://rickandmortyapi.com/api/episode/12",
+        "https://rickandmortyapi.com/api/episode/13",
+        "https://rickandmortyapi.com/api/episode/14",
+        "https://rickandmortyapi.com/api/episode/15",
+        "https://rickandmortyapi.com/api/episode/16",
+        "https://rickandmortyapi.com/api/episode/17",
+        "https://rickandmortyapi.com/api/episode/18",
+        "https://rickandmortyapi.com/api/episode/19",
+        "https://rickandmortyapi.com/api/episode/20",
+        "https://rickandmortyapi.com/api/episode/21",
+        "https://rickandmortyapi.com/api/episode/22",
+        "https://rickandmortyapi.com/api/episode/23",
+        "https://rickandmortyapi.com/api/episode/24",
+        "https://rickandmortyapi.com/api/episode/25",
+        "https://rickandmortyapi.com/api/episode/26",
+        "https://rickandmortyapi.com/api/episode/27",
+        "https://rickandmortyapi.com/api/episode/28",
+        "https://rickandmortyapi.com/api/episode/29",
+        "https://rickandmortyapi.com/api/episode/30",
+        "https://rickandmortyapi.com/api/episode/31"
+        ],
+        "url": "https://rickandmortyapi.com/api/character/1",
+        "created": "2017-11-04T18:48:46.250Z"
+        }
+  ]
   useEffect(() => {
-    // TODO: Add API Request here - must run in `useEffect`
-    //  Important: verify the 2nd `useEffect` parameter: the dependancies array!
+    axios.get("https://rickandmortyapi.com/api/character/")
+      .then(res => {
+        let characters = res.data.results.filter(char =>{
+          return char.name.toLowerCase().includes(search.toLowerCase());
+        })
+        setResults(characters);
+
+      }
+      
+      )
+      .catch(err => console.log(err))
   }, []);
+
+  // useEffect(() => {
+
+  //       let characters = chars.filter(char =>{
+  //         return char.name.toLowerCase().includes(search.toLowerCase());
+  //       })
+  //       setResults(characters);
+
+  //     }, [search]);
+
 
   return (
     <section className="character-list">
-      <h2>TODO: `array.map()` over your state here!</h2>
+      <Search search={search} setSearch={setSearch}/>
+
+      <CardContainer>{results.map(char =>{
+        return (
+        <CharacterCard character={char}/>
+        )
+      })}</CardContainer>
+
     </section>
   );
+
+
+  
 }
+
+
+
+
